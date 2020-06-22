@@ -41,19 +41,20 @@ xlabel('t')
 ylabel('y(t), x(t)')
 
 %% Discretizando os sistemas
-dn = 0.1;
+dt = 0.1;
 %Dessa forma, podemos ter sinais de no maximo 1/0.05 = 20Hz
-sysD1 = c2d(ss(sysC1), dn);
-sysD2 = c2d(ss(sysC2), dn);
+sysD1 = c2d(ss(sysC1), dt);
+sysD2 = c2d(ss(sysC2), dt);
 [phi1, gama1] = deal(sysD1.A, sysD1.B);
 [phi2, gama2] = deal(sysD2.A, sysD2.B);
 
 %% Respostas do sistema em tempo discreto
 % Respostas ao degrau
 figure(2);
-stopN = 6;
-n = 0:dn:stopN;
-N = size(n', 1);
+stopTime = 6;
+t = 0:dt:stopTime;
+N = size(t', 1);
+n = 0:N-1;
 stepD = ones(N);
 [x1, x2] = deal(zeros(2, N));
 [y1, y2] = deal(zeros(1, N));
@@ -76,10 +77,11 @@ ylabel('y[n]');
 %% 
 
 % Respostas a senoide
-stopN = 20;
-n = 0:dn:stopN;
-N = size(n', 1);
-u1 = sin(2*pi*0.2*n);
+stopTime = 20;
+t = 0:dt:stopTime;
+N = size(t', 1);
+u1 = sin(2*pi*0.2*t);
+n = 0:N-1;
 x1=zeros(2, N);
 y1=zeros(1, N);
 for i = 2:N
@@ -90,10 +92,11 @@ subplot(2, 2, 3);
 stem(n, y1);
 xlabel('n');
 ylabel('y[n]');
-stopN = 6;
-n = 0:dn:stopN;
-u2 = sin(2*pi*1.5*n);
-N = size(n', 1);
+stopTime = 6;
+t = 0:dt:stopTime;
+u2 = sin(2*pi*1.5*t);
+N = size(t', 1);
+n = 0:N-1;
 x2=zeros(2, N);
 y2=zeros(1, N);
 for i = 2:N
