@@ -30,6 +30,6 @@ gama = sysD.B;
 for i = 2:N
     x(:,i) = phi*x(:,i-1) + gama*u(i-1);
     y(i) = C*x(:,i) + D*u(i);
-end+
+end
 subplot(2, 1, 2);
 stem(t, y);
