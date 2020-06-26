@@ -1,0 +1,75 @@
+%%Definição dos sistemas
+%sistemas em tempo contínuo
+sysC1 = tf(1, [1 3 2]);
+sysC2 = tf(0.5, [1 1 -2]);
+q_0=[0;0];
+n=0:99;
+%discretizando os sistemas
+dt = 0.1;
+t=0:0.1:9.9;
+sysD1 = c2d(ss(sysC1), dt);
+sysD2 = c2d(ss(sysC2), dt);
+[A1,B1,C1,D1]=deal(sysD1.A, sysD1.B,sysD1.C,sysD1.D);
+[A2,B2,C2,D2]=deal(sysD2.A, sysD2.B,sysD2.C,sysD2.D);
+
+%%respostas sistema 1
+%entrada ao degrau sistema 1
+z=sym('z');
+X=ztrans(sym('1'));
+QED=inv(eye(2)-z^(-1)*A1)*q_0+inv(z*eye(2)-A1)*B1*X;
+QED=simplify(QED);
+
+Yed=simplify(C1*QED);
+yed=iztrans(Yed);
+yed=double(subs(yed,n));
+
+subplot(4,1,1);
+stem(t,yed);
+axis([0 10 min(yed) (max(yed)+0.1)]);
+xlabel('nt');
+ylabel('y[n]');
+title('Resposta ao degrau sistema 1');
+%entrada a senoide sistema 1
+S=(z*sin(1/8))/(z^2 - 2*cos(1/8)*z + 1);
+QES=inv(eye(2)-z^(-1)*A1)*q_0+inv(z*eye(2)-A1)*B1*S;
+QES=simplify(QES);
+
+Yes=simplify(C1*QES);
+yes=iztrans(Yes);
+yes=double(subs(yes,n));
+
+subplot(4,1,2);
+stem(t,yes);
+axis([0 10 min(yes) (max(yes))]);
+xlabel('nt');
+ylabel('y[n]');
+title('Resposta a senoide sistema 1');
+%%respostas sistema 2
+%entrada ao degrau sistema 2
+QID=inv(eye(2)-z^(-1)*A2)*q_0+inv(z*eye(2)-A2)*B2*X;
+QID=simplify(QID);
+
+Yid=simplify(C2*QID);
+yid=iztrans(Yid);
+yid=double(subs(yid,n));
+
+subplot(4,1,3);
+stem(t,yid);
+axis([0 10 min(yid) (max(yid))]);
+xlabel('nt');
+ylabel('y[n]');
+title('Resposta ao degrau do sistema 2');
+%entrada a senoide sistema 2
+QIS=inv(eye(2)-z^(-1)*A2)*q_0+inv(z*eye(2)-A2)*B2*S;
+QIS=simplify(QIS);
+
+Yis=simplify(C1*QIS);
+yis=iztrans(Yis);
+yis=double(subs(yis,n));
+
+subplot(4,1,4);
+stem(t,yis);
+axis([0 10 min(yis) (max(yis))]);
+xlabel('nt');
+ylabel('y[n]');
+title('Resposta a senoide do sistema 2');
