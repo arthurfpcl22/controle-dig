@@ -16,7 +16,7 @@ subplot(2, 2, 1);
 step(sysC1, 6);
 xlabel('t')
 ylabel('y(t)')
-subplot(2, 2, 2);
+subplot(2, 2, 3);
 step(sysC2, 6);
 xlabel('t')
 ylabel('y(t)')
@@ -26,7 +26,7 @@ dt = 0.01;
 stopTime = 20;
 t = 0:dt:stopTime;
 u1 = sin(2*pi*0.2*t);
-subplot(2, 2, 3);
+subplot(2, 2, 2);
 lsim(sysC1,u1,t);
 xlabel('t')
 ylabel('y(t), x(t)')
@@ -70,7 +70,7 @@ for i = 2:N
     x2(:,i) = phi2*x2(:,i-1) + gama2*stepD(i-1);
     y2(i) = C2*x2(:,i) + D2*stepD(i);
 end
-subplot(2, 2, 2);
+subplot(2, 2, 3);
 stem(n, y2);
 xlabel('n');
 ylabel('y[n]');
@@ -88,7 +88,7 @@ for i = 2:N
     x1(:,i) = phi1*x1(:,i-1) + gama1*u1(i-1);
     y1(i) = C1*x1(:,i) + D1*u1(i);
 end
-subplot(2, 2, 3);
+subplot(2, 2, 2);
 stem(n, y1);
 xlabel('n');
 ylabel('y[n]');
