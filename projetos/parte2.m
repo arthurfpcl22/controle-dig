@@ -22,4 +22,35 @@ Co = ctrb(sysD1.A, sysD1.B);
 Ob = obsv(sysD1.A, sysD1.C);
 
 %% Resposta em frequência
+figure(2);
+bode(sysD1);
 
+sysC2 = tf(0.5, [1 1 -2]);
+sysD2 = c2d(ss(sysC2), dt);
+figure(3);
+bode(sysD2);
+
+%Para o sistema estavel, vejamos o efeito de atenuacao em diferentes
+%frequencias - 1Hz, 3Hz (frequencias contínuas)
+figure(4);
+N = 200;
+n = 1:N;
+w1 = 1;
+w2 = 3;
+u1 = sin(w1*dt*n);
+u2 = sin(w2*dt*n);
+x1=zeros(2, N);
+y1=zeros(1, N);
+for i = 2:N
+    x1(:,i) = sysD1.A*x1(:,i-1) + sysD1.B*u1(i-1);
+    y1(i) = C1*x1(:,i) + D1*u1(i);
+end
+stem(n,y1);
+hold on;
+x1=zeros(2, N);
+y1=zeros(1, N);
+for i = 2:N
+    x1(:,i) = sysD1.A*x1(:,i-1) + sysD1.B*u2(i-1);
+    y1(i) = C1*x1(:,i) + D1*u2(i);
+end
+stem(n,y1);
