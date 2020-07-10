@@ -1,0 +1,34 @@
+%%controlador PD com 16% overshoot e tempo de acomodação 1s
+%parâmetros do sistema
+P=tf([1],[1 3 2]);
+phi=0.503;
+Ts=1;
+F=feedback(G,+1);
+subplot(2,2,1);
+step(F);
+title('Sistema sem controlador')
+%projeto controlador PD
+wn=4/(phi*Ts);
+K=2*phi*wn-3;
+a=(wn^2-2)/K;
+Cpd=tf([K*1 K*a],[1]);
+Fpd=feedback(G*Cpd,+1);
+subplot(2,2,2);
+step(Fpd);
+title('Controlador PD')
+%%Projeto PI(apenas cancelamento polo mais próximo) objetivando erro nulo
+Cpi=tf([1 1],[1 0]);
+Fpi=feedback(G*Cpi,+1);
+subplot(2,2,3);
+step(Fpi);
+title('Controlador PI')
+%%Projeto PID mesmos parametros do PD com erro em regime nulo
+sigma=4/Ts;
+wd=sigma*tan(acos(phi));
+mod=sigma/phi;
+K=mod^2;
+Cpid=tf([K*1 K*3 K*2],[1 8 0]);
+Fpid=feedback(G*Cpid,+1);
+subplot(2,2,4);
+step(Fpid);
+title('Controlador PID')
